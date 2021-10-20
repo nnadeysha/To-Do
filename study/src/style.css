@@ -1,0 +1,33 @@
+*{
+    box-sizing: border-box;
+}
+body{
+    background-color: rgb(70, 65, 65);
+}
+.tools{
+
+}
+
+.add{
+
+}
+.task-list{
+border: 1px solid #fff;
+width: 400px;
+
+display: flex;
+justify-content: center;
+
+}
+
+.task-name{
+color: #fff;
+font-size: 32px;
+text-align: center;
+}
+.add, .edit, .delete {
+width: 100px;
+background-color: #ccc;
+color: #f00;
+border: 1px #fff solid;
+}
