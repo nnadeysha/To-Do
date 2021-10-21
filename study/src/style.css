@@ -25,9 +25,10 @@ color: #fff;
 font-size: 32px;
 text-align: center;
 }
-.add, .edit, .delete {
+.add, .edit, .delete, .animBtn{
 width: 100px;
 background-color: #ccc;
 color: #f00;
 border: 1px #fff solid;
+display: flex;
 }

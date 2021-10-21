@@ -1,0 +1,17 @@
+.animBtn{
+
+}
+.animBtn {
+transition-duration: 1s;
+}
+
+.animBtn-hidden {
+    transform: scale(0);
+}
+
+.counterBtn{
+    transition-duration: 1s;
+}
+.counterBtn-hidden {
+    transform: scale(0);
+}

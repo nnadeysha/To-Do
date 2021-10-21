@@ -1,39 +1,61 @@
 import Control from "./common/control";
-let arr: ITaskListData = [
+import {ITaskListData, ITaskData} from "./intefaces";
+import { TodoModel } from "./todoModel";
+import { Animation } from "./animation";
+/* let arr: ITaskListData = [
   { name: "Nana", content: "string" },
   { name: "Tana", content: "string" },
   { name: "Sana", content: "string" },
-];
+]; */
 
 export class App extends Control {
   taskList: TaskList;
   tools: Tools;
-  constructor(parentNode: HTMLElement) {
+  model: TodoModel;
+  animationDemo: Animation;
+  constructor(parentNode: HTMLElement, model: TodoModel) {
     super(parentNode);
+    this.model = model
+    this.update = this.update.bind(this)
+    model.onUpdateTodoList.add(
+      this.update
+      /* (data)=>{
+      this.update(data)
+    } */)
+    this.animationDemo = new Animation(this.node)
     this.tools = new Tools(this.node);
     this.tools.onAddClick = () => {
-      arr.push({ name: "Jana", content: "string" });
-      this.update(arr);
+      model.create({ name: "Jana", content: "string" }).then(_=>{
+/*         this.update(model.todoList);
+ */      })
+/*       arr.push({ name: "Jana", content: "string" });
+ */      
     };
-    this.taskList = new TaskList(this.node);
+        this.taskList = new TaskList(this.node);
     this.taskList.onEditClick = (i) => {
-        const form = new TaskForm(this.node, arr[i]);
-        form.onOk = (data) =>{form.destroy()
-            arr[i]= data;
-            this.update(arr)
+        const form = new TaskForm(this.node, model.todoList[i]);
+        form.onOk = (data) =>{
+          form.destroy()
+          model.update({ index: i, ...data}).then(_=>{
+/*             this.update(model.todoList);
+ */          })
         }
 
         form.onCancel= () =>{form.destroy()}
     };
     this.taskList.onDeleteClick = (i) => {
-      arr.splice(i, 1);
-
-      this.update(arr);
+      model.delete({  index: i }).then(_=>{
+/*         this.update(model.todoList);
+ */      })
     };
-    this.update(arr);
+    this.update(model.todoList);
   }
   update(data: ITaskListData) {
     this.taskList.update(data);
+  }
+  destroy(){
+    this.model.onUpdateTodoList.remove(this.update)
+    super.destroy()
   }
 }
 
@@ -50,11 +72,6 @@ export class Tools extends Control {
   }
 }
 
-type ITaskListData = Array<ITaskData>;
-interface ITaskData {
-  name: string;
-  content: string;
-}
 
 export class TaskList extends Control {
   tasks: Task[];
@@ -96,8 +113,8 @@ export class Task extends Control {
     this.taskName = new Control(this.node, "div", "task-name");
     this.taskContent = new Control(this.node, "div", "task-content");
     const buttons = new Control(this.node, "div", "buttons");
-    this.editButton = new Control(this.node, "button", "edit", "Edit");
-    this.deleteButton = new Control(this.node, "button", "delete", "Delete");
+    this.editButton = new Control(buttons.node, "button", "edit", "Edit");
+    this.deleteButton = new Control(buttons.node, "button", "delete", "Delete");
     this.editButton.node.onclick = () => this.onEditClick();
     this.deleteButton.node.onclick = () => this.onDeleteClick();
   }
